@@ -16,7 +16,11 @@ class ActionLayer(BaseActionLayer):
         layers.ActionNode
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for effectA in actionA.effects:
+            for effectB in actionB.effects:
+                if effectA == ~effectB:
+                    return True
+        return False
 
 
     def _interference(self, actionA, actionB):
@@ -27,7 +31,15 @@ class ActionLayer(BaseActionLayer):
         layers.ActionNode
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for effect in actionA.effects:
+            for precondition in actionB.preconditions:
+                if effect == ~precondition:
+                    return True
+        for effect in actionB.effects:
+            for precondition in actionA.preconditions:
+                if effect == ~precondition:
+                    return True
+        return False
 
     def _competing_needs(self, actionA, actionB):
         """ Return True if any preconditions of the two actions are pairwise mutex in the parent layer
@@ -38,7 +50,11 @@ class ActionLayer(BaseActionLayer):
         layers.BaseLayer.parent_layer
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for preconditionA in actionA.preconditions:
+            for preconditionB in actionB.preconditions:
+                if self.parent_layer.is_mutex(preconditionA, preconditionB):
+                    return True
+        return False
 
 
 class LiteralLayer(BaseLiteralLayer):
@@ -51,12 +67,16 @@ class LiteralLayer(BaseLiteralLayer):
         layers.BaseLayer.parent_layer
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for literal_A in self.children[literalA]:
+            for literal_B in self.children[literalB]:
+                if ~self.parent_layer.is_mutex(literal_A,literal_B):
+                    return True
+        return False
 
     def _negation(self, literalA, literalB):
         """ Return True if two literals are negations of each other """
         # TODO: implement this function
-        raise NotImplementedError
+        return literalA == ~literalB
 
 
 class PlanningGraph:
