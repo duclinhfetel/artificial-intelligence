@@ -1,2 +1,2 @@
 # artificial-intelligence
-Udacity Artificial Intelligence Nanodegree
+Udacity Artificial Intelligence Nanodegree 2018
