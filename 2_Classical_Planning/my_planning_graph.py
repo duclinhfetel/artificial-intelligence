@@ -135,7 +135,22 @@ class PlanningGraph:
         Russell-Norvig 10.3.1 (3rd Edition)
         """
         # TODO: implement this function
-        raise NotImplementedError
+        levelSum = 0
+        maxLevel = 0
+        copyGoals = self.goal.copy()
+        for _goal in self.goal:
+            if _goal in self.literal_layers[-1]:
+                copyGoals.remove(_goal)
+        while not self._is_leveled and len(copyGoals) != 0 :
+            self._extend()
+            maxLevel += 1
+            temp = copyGoals.copy()
+            for _goal in copyGoals:
+                if _goal in self.literal_layers[-1]:
+                    temp.remove(_goal)
+                    levelSum += maxLevel
+            copyGoals = temp
+        return levelSum
 
     def h_maxlevel(self):
         """ Calculate the max level heuristic for the planning graph
@@ -159,8 +174,35 @@ class PlanningGraph:
         -----
         WARNING: you should expect long runtimes using this heuristic with A*
         """
-        # TODO: implement maxlevel heuristic
-        raise NotImplementedError
+        # TODO: implement maxlevel heuristic 
+        maxLevel = 0
+        copyGoals = self.goal.copy()
+        for _goal in self.goal:
+            if _goal in self.literal_layers[-1]:
+                copyGoals.remove(_goal)
+        while not self._is_leveled and len(copyGoals) != 0 :
+            self._extend()
+            maxLevel += 1
+            temp = copyGoals.copy()
+            for _goal in copyGoals:
+                if _goal in self.literal_layers[-1]:
+                    temp.remove(_goal)
+            copyGoals = temp
+        return maxLevel
+
+        # maxLevel = 0
+        # goals = list(self.goal)
+        # copyGoals = [False]*len(goals)
+        # for i in range(len(goals)):
+        #     if goals[i] in self.literal_layers[-1]:
+        #         copyGoals[i] = True
+        # while not self._is_leveled and copyGoals.count(False) > 0 :
+        #     self._extend()
+        #     maxLevel += 1
+        #     for i in range(len(goals)):
+        #         if goals[i] in self.literal_layers[-1]:
+        #             copyGoals[i] = True
+        # return maxLevel
 
     def h_setlevel(self):
         """ Calculate the set level heuristic for the planning graph
@@ -180,7 +222,7 @@ class PlanningGraph:
         WARNING: you should expect long runtimes using this heuristic on complex problems
         """
         # TODO: implement setlevel heuristic
-        raise NotImplementedError
+        raise  NotImplementedError
 
     ##############################################################################
     #                     DO NOT MODIFY CODE BELOW THIS LINE                     #
