@@ -218,7 +218,7 @@ class PlanningGraph:
             self._extend()
             if self.goal <= self.literal_layers[-1] and goal_pair_mutex_last_literal():
                 return len(self.action_layers)
-
+        return -1
     ##############################################################################
     #                     DO NOT MODIFY CODE BELOW THIS LINE                     #
     ##############################################################################
