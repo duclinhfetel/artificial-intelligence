@@ -16,7 +16,11 @@ class ActionLayer(BaseActionLayer):
         layers.ActionNode
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for effectA in actionA.effects:
+            for effectB in actionB.effects:
+                if effectA == ~effectB:
+                    return True
+        return False
 
 
     def _interference(self, actionA, actionB):
@@ -27,7 +31,15 @@ class ActionLayer(BaseActionLayer):
         layers.ActionNode
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for effect in actionA.effects:
+            for precondition in actionB.preconditions:
+                if effect == ~precondition:
+                    return True
+        for effect in actionB.effects:
+            for precondition in actionA.preconditions:
+                if effect == ~precondition:
+                    return True
+        return False
 
     def _competing_needs(self, actionA, actionB):
         """ Return True if any preconditions of the two actions are pairwise mutex in the parent layer
@@ -38,7 +50,11 @@ class ActionLayer(BaseActionLayer):
         layers.BaseLayer.parent_layer
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for preconditionA in actionA.preconditions:
+            for preconditionB in actionB.preconditions:
+                if self.parent_layer.is_mutex(preconditionA, preconditionB):
+                    return True
+        return False
 
 
 class LiteralLayer(BaseLiteralLayer):
@@ -51,12 +67,16 @@ class LiteralLayer(BaseLiteralLayer):
         layers.BaseLayer.parent_layer
         """
         # TODO: implement this function
-        raise NotImplementedError
+        for literal_A in self.parents[literalA]:
+            for literal_B in self.parents[literalB]:
+                if not self.parent_layer.is_mutex(literal_A,literal_B):
+                    return False
+        return True
 
     def _negation(self, literalA, literalB):
         """ Return True if two literals are negations of each other """
         # TODO: implement this function
-        raise NotImplementedError
+        return literalA == ~literalB
 
 
 class PlanningGraph:
@@ -115,7 +135,22 @@ class PlanningGraph:
         Russell-Norvig 10.3.1 (3rd Edition)
         """
         # TODO: implement this function
-        raise NotImplementedError
+        levelSum = 0
+        maxLevel = 0
+        copyGoals = self.goal.copy()
+        for _goal in self.goal:
+            if _goal in self.literal_layers[-1]:
+                copyGoals.remove(_goal)
+        while not self._is_leveled and len(copyGoals) != 0 :
+            self._extend()
+            maxLevel += 1
+            temp = copyGoals.copy()
+            for _goal in copyGoals:
+                if _goal in self.literal_layers[-1]:
+                    temp.remove(_goal)
+                    levelSum += maxLevel
+            copyGoals = temp
+        return levelSum
 
     def h_maxlevel(self):
         """ Calculate the max level heuristic for the planning graph
@@ -140,7 +175,20 @@ class PlanningGraph:
         WARNING: you should expect long runtimes using this heuristic with A*
         """
         # TODO: implement maxlevel heuristic
-        raise NotImplementedError
+        maxLevel = 0
+        copyGoals = self.goal.copy()
+        for _goal in self.goal:
+            if _goal in self.literal_layers[-1]:
+                copyGoals.remove(_goal)
+        while not self._is_leveled and len(copyGoals) != 0 :
+            self._extend()
+            maxLevel += 1
+            temp = copyGoals.copy()
+            for _goal in copyGoals:
+                if _goal in self.literal_layers[-1]:
+                    temp.remove(_goal)
+            copyGoals = temp
+        return maxLevel
 
     def h_setlevel(self):
         """ Calculate the set level heuristic for the planning graph
@@ -160,7 +208,16 @@ class PlanningGraph:
         WARNING: you should expect long runtimes using this heuristic on complex problems
         """
         # TODO: implement setlevel heuristic
-        raise NotImplementedError
+        def goal_pair_mutex_last_literal():
+            for _goal_1, _goal_2 in combinations(self.goal, 2):
+                if self.literal_layers[-1].is_mutex(_goal_1, _goal_2):
+                    return False
+            return True
+
+        while not self._is_leveled:
+            self._extend()
+            if self.goal <= self.literal_layers[-1] and goal_pair_mutex_last_literal():
+                return len(self.action_layers)
 
     ##############################################################################
     #                     DO NOT MODIFY CODE BELOW THIS LINE                     #
