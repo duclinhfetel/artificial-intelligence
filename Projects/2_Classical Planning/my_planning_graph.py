@@ -22,7 +22,6 @@ class ActionLayer(BaseActionLayer):
                     return True
         return False
 
-
     def _interference(self, actionA, actionB):
         """ Return True if the effects of either action negate the preconditions of the other 
         
@@ -56,7 +55,6 @@ class ActionLayer(BaseActionLayer):
                     return True
         return False
 
-
 class LiteralLayer(BaseLiteralLayer):
 
     def _inconsistent_support(self, literalA, literalB):
@@ -77,7 +75,6 @@ class LiteralLayer(BaseLiteralLayer):
         """ Return True if two literals are negations of each other """
         # TODO: implement this function
         return literalA == ~literalB
-
 
 class PlanningGraph:
     def __init__(self, problem, state, serialize=True, ignore_mutexes=False):
