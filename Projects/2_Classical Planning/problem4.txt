@@ -4,7 +4,7 @@ Solving Air Cargo Problem 4 using breadth_first_search...
 # Actions   Expansions   Goal Tests   New Nodes
    104        99736       114953      944130  
 
-Plan length: 14  Time elapsed in seconds: 94.4795746521269
+Plan length: 14  Time elapsed in seconds: 51.717622869000024
 Load(C1, P1, SFO)
 Fly(P1, SFO, ATL)
 Load(C3, P1, ATL)
@@ -26,7 +26,7 @@ Solving Air Cargo Problem 4 using depth_first_graph_search...
 # Actions   Expansions   Goal Tests   New Nodes
    104        25174       25175       228849  
 
-Plan length: 24132  Time elapsed in seconds: 3633.867827464862
+Plan length: 24132  Time elapsed in seconds: 2099.681321295
 Fly(P1, SFO, ORD)
 Fly(P2, JFK, ORD)
 Fly(P1, ORD, ATL)
@@ -24166,7 +24166,7 @@ Solving Air Cargo Problem 4 using uniform_cost_search...
 # Actions   Expansions   Goal Tests   New Nodes
    104        113339      113341     1066413  
 
-Plan length: 14  Time elapsed in seconds: 102.60357077589379
+Plan length: 14  Time elapsed in seconds: 62.77275073999999
 Load(C2, P2, JFK)
 Fly(P2, JFK, ATL)
 Load(C3, P2, ATL)
@@ -24188,7 +24188,7 @@ Solving Air Cargo Problem 4 using greedy_best_first_graph_search with h_unmet_go
 # Actions   Expansions   Goal Tests   New Nodes
    104          29          31         280    
 
-Plan length: 18  Time elapsed in seconds: 0.05689960083009282
+Plan length: 18  Time elapsed in seconds: 0.03172930800019458
 Load(C1, P1, SFO)
 Load(C2, P2, JFK)
 Fly(P2, JFK, SFO)
@@ -24214,7 +24214,7 @@ Solving Air Cargo Problem 4 using greedy_best_first_graph_search with h_pg_level
 # Actions   Expansions   Goal Tests   New Nodes
    104          17          19         165    
 
-Plan length: 17  Time elapsed in seconds: 12.611480047634814
+Plan length: 17  Time elapsed in seconds: 8.19898543499994
 Fly(P2, JFK, ORD)
 Load(C1, P1, SFO)
 Fly(P1, SFO, JFK)
@@ -24239,7 +24239,7 @@ Solving Air Cargo Problem 4 using greedy_best_first_graph_search with h_pg_maxle
 # Actions   Expansions   Goal Tests   New Nodes
    104          56          58         580    
 
-Plan length: 17  Time elapsed in seconds: 25.742564922485144
+Plan length: 17  Time elapsed in seconds: 13.660782272000233
 Load(C1, P1, SFO)
 Load(C2, P2, JFK)
 Fly(P2, JFK, ORD)
@@ -24264,7 +24264,7 @@ Solving Air Cargo Problem 4 using greedy_best_first_graph_search with h_pg_setle
 # Actions   Expansions   Goal Tests   New Nodes
    104         114         116         1229   
 
-Plan length: 24  Time elapsed in seconds: 319.2276348962473
+Plan length: 24  Time elapsed in seconds: 166.75346231999993
 Load(C1, P1, SFO)
 Fly(P1, SFO, ORD)
 Load(C2, P2, JFK)
@@ -24296,7 +24296,7 @@ Solving Air Cargo Problem 4 using astar_search with h_unmet_goals...
 # Actions   Expansions   Goal Tests   New Nodes
    104        34330       34332       328509  
 
-Plan length: 14  Time elapsed in seconds: 51.81310375480916
+Plan length: 14  Time elapsed in seconds: 29.3818099959999
 Load(C2, P2, JFK)
 Fly(P2, JFK, ATL)
 Load(C3, P2, ATL)
@@ -24318,10 +24318,64 @@ Solving Air Cargo Problem 4 using astar_search with h_pg_levelsum...
 # Actions   Expansions   Goal Tests   New Nodes
    104         1208        1210       12210   
 
-Plan length: 15  Time elapsed in seconds: 1046.6040979276295
+Plan length: 15  Time elapsed in seconds: 557.5784876759999
 Load(C1, P1, SFO)
 Fly(P1, SFO, ORD)
 Load(C4, P1, ORD)
 Load(C5, P1, ORD)
 Fly(P1, ORD, JFK)
 Unload(C5, P1, JFK)
+Unload(C1, P1, JFK)
+Load(C2, P1, JFK)
+Fly(P1, JFK, SFO)
+Fly(P2, JFK, ATL)
+Load(C3, P2, ATL)
+Fly(P2, ATL, JFK)
+Unload(C4, P1, SFO)
+Unload(C3, P2, JFK)
+Unload(C2, P1, SFO)
+
+
+Solving Air Cargo Problem 4 using astar_search with h_pg_maxlevel...
+
+# Actions   Expansions   Goal Tests   New Nodes
+   104        62077       62079       599376  
+
+Plan length: 14  Time elapsed in seconds: 18633.476562229
+Load(C2, P2, JFK)
+Fly(P2, JFK, ATL)
+Load(C3, P2, ATL)
+Fly(P2, ATL, ORD)
+Load(C4, P2, ORD)
+Load(C5, P2, ORD)
+Fly(P2, ORD, SFO)
+Load(C1, P2, SFO)
+Unload(C4, P2, SFO)
+Unload(C2, P2, SFO)
+Fly(P2, SFO, JFK)
+Unload(C5, P2, JFK)
+Unload(C3, P2, JFK)
+Unload(C1, P2, JFK)
+
+
+Solving Air Cargo Problem 4 using astar_search with h_pg_setlevel...
+
+# Actions   Expansions   Goal Tests   New Nodes
+   104        37912       37914       373328  
+
+Plan length: 14  Time elapsed in seconds: 54027.888974003
+Load(C2, P2, JFK)
+Fly(P2, JFK, ATL)
+Load(C3, P2, ATL)
+Fly(P2, ATL, ORD)
+Load(C4, P2, ORD)
+Load(C5, P2, ORD)
+Fly(P2, ORD, SFO)
+Load(C1, P2, SFO)
+Unload(C4, P2, SFO)
+Unload(C2, P2, SFO)
+Fly(P2, SFO, JFK)
+Unload(C5, P2, JFK)
+Unload(C3, P2, JFK)
+Unload(C1, P2, JFK)
+
