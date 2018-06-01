@@ -46,4 +46,47 @@ class CustomPlayer(DataPlayer):
         #          call self.queue.put(ACTION) at least once before time expires
         #          (the timer is automatically managed for you)
         import random
-        self.queue.put(random.choice(state.actions()))
+        if state.ply_count < 2: self.queue.put(random.choice(state.actions()))
+        self.queue.put(self.alphabeta(state, depth = 3))
+    
+    def alphabeta(self, gameState, depth, alpha = float("-inf"), beta = float('inf')):
+        best_score = float("-inf")
+        best_move = None
+
+        def max_value(gameState, depth, alpha, beta):
+            if gameState.terminal_test(): 
+                return gameState.utility(self.player_id)
+            if depth <= 0: return self.score(gameState)
+            v = float('-inf')
+            for action in gameState.actions():
+                v = max(v, min_value(gameState.result(action), depth - 1, alpha, beta))
+                alpha = max(alpha, v)
+                if beta <= alpha:
+                    break
+            return v
+        def min_value(gameState, depth, alpha, beta):
+            if gameState.terminal_test(): 
+                return gameState.utility(self.player_id)
+            if depth <= 0: return self.score(gameState)
+            v = float('inf')
+            for action in gameState.actions():
+                v = min(v, max_value(gameState.result(action), depth - 1, alpha, beta))
+                beta = min(beta, v)
+                if beta <= alpha:
+                    break
+            return v
+
+        for action in gameState.actions():
+            value = min_value(gameState.result(action), depth - 1, alpha, beta)
+            alfa = max(alpha, value)
+            if value > best_score:
+                best_score = value
+                best_move = action
+        return best_move
+    
+    def score(self, state):
+        own_loc = state.locs[self.player_id]
+        opp_loc = state.locs[1 - self.player_id]
+        own_liberties = state.liberties(own_loc)
+        opp_liberties = state.liberties(opp_loc)
+        return 2*len(own_liberties) - len(opp_liberties)

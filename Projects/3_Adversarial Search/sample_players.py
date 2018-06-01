@@ -21,7 +21,10 @@ class BasePlayer:
 
         See RandomPlayer and GreedyPlayer for examples.
         """
-        raise NotImplementedError
+        if self.timer < TIME_LIMIT:
+            self.queue.put(state.actions())
+        else:
+            self.queue.put(random.choice(state.actions()))
 
 
 class DataPlayer(BasePlayer):
