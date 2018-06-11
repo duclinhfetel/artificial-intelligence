@@ -46,47 +46,74 @@ class CustomPlayer(DataPlayer):
         #          call self.queue.put(ACTION) at least once before time expires
         #          (the timer is automatically managed for you)
         import random
+        # randomly select a move as player 1 or 2 on an empty board, otherwise
+        # return the optimal alphabeta move at a fixed search depth 
         if state.ply_count < 2: self.queue.put(random.choice(state.actions()))
         self.queue.put(self.alphabeta(state, depth = 3))
     
     def alphabeta(self, gameState, depth, alpha = float("-inf"), beta = float('inf')):
+        """ Return the move along a branch of the game tree that
+        has the best possible value.  A move is a pair of coordinates
+        in (column, row) order corresponding to a legal move for
+        the searching player.
+        
+        You can ignore the special case of calling this function
+        from a terminal state.
+        """
+        alpha = float("-inf")
+        beta = float('inf')
         best_score = float("-inf")
         best_move = None
 
         def max_value(gameState, depth, alpha, beta):
-            if gameState.terminal_test(): 
-                return gameState.utility(self.player_id)
-            if depth <= 0: return self.score(gameState)
+            """ Return the value for a loss (-1) if the game is over,
+            otherwise return the maximum value over all legal child
+            nodes.
+            """
+            if gameState.terminal_test() or depth <= 0: 
+                return self.score_alpha_beta(gameState)
             v = float('-inf')
             for action in gameState.actions():
+                # the depth should be decremented by 1 on each call
                 v = max(v, min_value(gameState.result(action), depth - 1, alpha, beta))
+                if v >= beta:
+                    return v
                 alpha = max(alpha, v)
                 if beta <= alpha:
                     break
             return v
         def min_value(gameState, depth, alpha, beta):
-            if gameState.terminal_test(): 
-                return gameState.utility(self.player_id)
-            if depth <= 0: return self.score(gameState)
+            """ Return the value for a win (+1) if the game is over,
+            otherwise return the minimum value over all legal child
+            nodes.
+            """
+            if gameState.terminal_test() or depth <= 0: 
+                return self.score_alpha_beta(gameState)
             v = float('inf')
             for action in gameState.actions():
+                # the depth should be decremented by 1 on each call
                 v = min(v, max_value(gameState.result(action), depth - 1, alpha, beta))
+                if v <= alpha:
+                    return v
                 beta = min(beta, v)
                 if beta <= alpha:
                     break
             return v
-
         for action in gameState.actions():
+            # call has been updated with a depth limit
             value = min_value(gameState.result(action), depth - 1, alpha, beta)
-            alfa = max(alpha, value)
+            alpha = max(alpha, value)
             if value > best_score:
                 best_score = value
                 best_move = action
         return best_move
     
-    def score(self, state):
+    def score_alpha_beta(self, state):
         own_loc = state.locs[self.player_id]
         opp_loc = state.locs[1 - self.player_id]
         own_liberties = state.liberties(own_loc)
         opp_liberties = state.liberties(opp_loc)
-        return 2*len(own_liberties) - len(opp_liberties)
+        if len(own_liberties) < len(opp_liberties):
+            return 2*len(own_liberties) - len(opp_liberties)
+        else:
+            return len(own_liberties) - 2*len(opp_liberties)
