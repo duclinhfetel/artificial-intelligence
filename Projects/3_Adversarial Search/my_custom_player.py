@@ -79,8 +79,7 @@ class CustomPlayer(DataPlayer):
                 if v >= beta:
                     return v
                 alpha = max(alpha, v)
-                if beta <= alpha:
-                    break
+                
             return v
         def min_value(gameState, depth, alpha, beta):
             """ Return the value for a win (+1) if the game is over,
@@ -96,8 +95,7 @@ class CustomPlayer(DataPlayer):
                 if v <= alpha:
                     return v
                 beta = min(beta, v)
-                if beta <= alpha:
-                    break
+                
             return v
         for action in gameState.actions():
             # call has been updated with a depth limit
